@@ -7,11 +7,11 @@ namespace AlwaysLightsOnManagement
 {
     public class ReportedIssues
     {
-        public int Issue_ID { get; set; }
-        public int ZIP_CODE { get; set; }
+        public int IssueID { get; set; }
+        public int ZIPCODE { get; set; }
         public string Address { get; set; }
-        public DateTime Reported_DateTime { get; set; } = DateTime.Now;
-        public bool Is_Fixed { get; set; }
+        public DateTime ReportedDateTime { get; set; } = DateTime.Now;
+        public bool IsFixed { get; set; }
 
         /// <summary>
         /// Create 1 Issue
@@ -20,10 +20,10 @@ namespace AlwaysLightsOnManagement
         /// <param name="address">address</param>
         public ReportedIssues(int zipCode, string address)
         {
-            ZIP_CODE = zipCode;
+            ZIPCODE = zipCode;
             Address = address;
-            Reported_DateTime = DateTime.Now;
-            Is_Fixed = false;
+            ReportedDateTime = DateTime.Now;
+            IsFixed = false;
         }
 
         public override bool Equals(object obj)
