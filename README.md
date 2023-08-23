@@ -63,7 +63,7 @@ WorkTypes Tábla (cég által előre adott: izzócsere, lámpabúra, vezeték ja
 ==================================================================================================================
 <WorkType_ID>, WorkType_Description
 
-ActualWork Tábla (a nap végén a munkás ebbe rögzíti az elvégzett melót)
+WorkList Tábla (a nap végén a munkás ebbe rögzíti az elvégzett melót)
 ==================================================================================================================
-<ActualWork_ID>, ++ReportedIssues.Issue_ID++, ++WorkTypes.WorkType_ID++, ++Worker.Worker_ID++, Fixing_DateTime (TimeStamp)
+<WorkList_ID>, ++ReportedIssues.Issue_ID++, ++WorkTypes.WorkType_ID++, ++Worker.Worker_ID++, Fixing_DateTime (TimeStamp)
 
