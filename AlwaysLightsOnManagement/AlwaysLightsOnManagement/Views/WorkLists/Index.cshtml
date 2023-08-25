@@ -1,0 +1,53 @@
+﻿@model IEnumerable<AlwaysLightsOnManagement.WorkList>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>WorkLists</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.FixingDateTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Issue)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.WorkType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Worker)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.FixingDateTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Issue.Address)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.WorkType.WorkTypeDescription)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Worker.FullName)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.WorkListId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.WorkListId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.WorkListId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

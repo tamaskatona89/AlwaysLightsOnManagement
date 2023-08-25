@@ -1,3 +1,8 @@
+using Microsoft.EntityFrameworkCore;
+
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.VisualStudio.Web.CodeGeneration.EntityFrameworkCore;
+
 namespace AlwaysLightsOnManagement
 {
     public class Program
@@ -8,6 +13,10 @@ namespace AlwaysLightsOnManagement
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+            builder.Services.AddRazorPages();
+            // db connection 
+            builder.Services.AddDbContext<DBServices>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnectionString")));
 
             var app = builder.Build();
 
@@ -21,6 +30,8 @@ namespace AlwaysLightsOnManagement
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.MapRazorPages();
 
             app.MapControllerRoute(
                 name: "default",
