@@ -39,7 +39,7 @@ namespace AlwaysLightsOnManagement.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IssueId,ZipCode,Address,ReportedDateTime,IsFixed")] ReportedIssue reportedIssue)
+        public async Task<IActionResult> Index([Bind("IssueId,ZipCode,Address,ReportedDateTime,IsFixed")] ReportedIssue reportedIssue)
         {
             if (ModelState.IsValid)
             {
@@ -48,12 +48,14 @@ namespace AlwaysLightsOnManagement.Controllers
 
                 await _context.SaveChangesAsync();
 
-                ViewBag.SuccessMessage = " has been created successfully!";
+                ViewBag.SuccessMessage = string.Format("Sikeres bejelentés!");
 
 
 
 
-                return RedirectToAction(nameof(Index));
+                //return RedirectToAction(nameof(Index));
+                //return RedirectToPage("/");
+                return View(reportedIssue);
                 
             }
             return View(reportedIssue);
