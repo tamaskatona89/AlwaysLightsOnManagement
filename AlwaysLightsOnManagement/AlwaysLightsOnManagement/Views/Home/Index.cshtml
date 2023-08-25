@@ -1,5 +1,49 @@
-﻿@{
+﻿@model AlwaysLightsOnManagement.ReportedIssue
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<h1>Hóm Pédzs</h1>
+
+
+<h1>Mindig Fényes Kft</h1>
+<h3>Nálunk mindig ragyog a fény!</h3>
+<h5>Valami gond van az Ön közelében a közvilágítással?</h5>
+<h5>Jelentse be! És hirtelenjében rohanunk is kijavítani! - hiszen mi nem engedhetjük meg magunknak a sötétséget!</h5>
+<h5>Hol nincs fény?</h5>
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create" method="post" OnSuccess="AddedSuccessfully();">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="ZipCode" class="control-label">Irányítószám</label>
+                <input asp-for="ZipCode" class="form-control" />
+                <span asp-validation-for="ZipCode" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Address" class="control-label">Település (kerület), Utca Házszám...</label>
+                <input asp-for="Address" class="form-control" />
+                <span asp-validation-for="Address" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Bejelentem!" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@{
+    //ViewBag.SuccessMessage = "fnslkfnsklfmnslkfmnsl";
+    if (ViewBag.SuccessMessage != null)
+    {
+        <div>
+            @ViewBag.SuccessMessage
+        </div>
+    }
+}
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

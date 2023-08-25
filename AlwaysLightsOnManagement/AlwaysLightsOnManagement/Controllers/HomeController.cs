@@ -1,5 +1,7 @@
 ﻿using AlwaysLightsOnManagement.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 
 namespace AlwaysLightsOnManagement.Controllers
@@ -7,10 +9,12 @@ namespace AlwaysLightsOnManagement.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly DBServices _context;
 
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
+            _context = new DBServices();
         }
 
         public IActionResult Index()
@@ -21,6 +25,38 @@ namespace AlwaysLightsOnManagement.Controllers
         public IActionResult Privacy()
         {
             return View();
+        }
+
+        // GET: ReportedIssues/Create
+        public IActionResult Create()
+        {
+            ViewBag.SuccessMessage = " has been created successfully!";
+            return View();
+        }
+
+        // POST: ReportedIssues/Create
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("IssueId,ZipCode,Address,ReportedDateTime,IsFixed")] ReportedIssue reportedIssue)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Add(reportedIssue);
+
+
+                await _context.SaveChangesAsync();
+
+                ViewBag.SuccessMessage = " has been created successfully!";
+
+
+
+
+                return RedirectToAction(nameof(Index));
+                
+            }
+            return View(reportedIssue);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
