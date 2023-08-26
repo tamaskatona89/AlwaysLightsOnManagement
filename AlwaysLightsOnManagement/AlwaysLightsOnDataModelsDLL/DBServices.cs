@@ -109,5 +109,14 @@ namespace AlwaysLightsOnManagement
         }
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+
+        public Object GetReportedIssuesByZIPCode(int paramZIPCode)
+        {
+            using (var dbServices = new DBServices())
+            {
+                //FETCH Matched ReportedIssues Data
+                return dbServices.ReportedIssues.Where(ri => ri.ZipCode == paramZIPCode  && ri.IsFixed == false).ToList();
+            }
+        }
     }
 }

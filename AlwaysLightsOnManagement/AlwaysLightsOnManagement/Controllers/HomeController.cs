@@ -45,18 +45,14 @@ namespace AlwaysLightsOnManagement.Controllers
             {
                 _context.Add(reportedIssue);
 
-
-                await _context.SaveChangesAsync();
-
-                ViewBag.SuccessMessage = string.Format("Sikeres bejelentés!");
-
-
-
-
-                //return RedirectToAction(nameof(Index));
-                //return RedirectToPage("/");
-                return View(reportedIssue);
+                if (await _context.SaveChangesAsync() > 0)
+                {
+                    //SAVING TO DB IS OK
+                    ViewBag.SuccessMessage = string.Format("Sikeres bejelentés!");
+                }
                 
+                //return RedirectToAction(nameof(Index));
+                return View(reportedIssue);
             }
             return View(reportedIssue);
         }
