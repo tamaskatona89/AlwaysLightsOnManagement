@@ -110,13 +110,64 @@ namespace AlwaysLightsOnManagement
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 
-        public Object GetReportedIssuesByZIPCode(int paramZIPCode)
+        /// <summary>
+        /// Returns a list of ReportedIssues in a specified Town/City/Village by a given ZIPCode
+        /// </summary>
+        /// <param name="paramZIPCode">Must be a 4 digit number. Ex.: 3333 for Terpes or 4400 for Nyíregyháza</param>
+        /// <returns>List of ReportedIssue objects</returns>
+        /// <exception cref="ArgumentException">If paramZIPCode is not a 4 digit number</exception>
+        public List<ReportedIssue>? GetReportedIssuesByZIPCode(int paramZIPCode)
         {
+            //Check paramZIPCode has 4 Digits
+            if (4 != Math.Floor(Math.Log10(paramZIPCode) + 1))
+            {
+                throw new ArgumentException("GetReportedIssuesByZIPCode(): Argument paramZIPCode must be a 4 digit number!");
+            }
             using (var dbServices = new DBServices())
             {
                 //FETCH Matched ReportedIssues Data
-                return dbServices.ReportedIssues.Where(ri => ri.ZipCode == paramZIPCode  && ri.IsFixed == false).ToList();
+                return dbServices.ReportedIssues.Where(ri => ri.ZipCode == paramZIPCode && ri.IsFixed == false).ToList();
             }
+        }
+
+        /// <summary>
+        /// Returns a list of ReportedIssues in a specified Budapest district, involved all sub-regions.
+        /// </summary>
+        /// <param name="districtNumber">Must be a 3 digit number. Ex.: 106 for VI.district</param>
+        /// <returns>List of ReportedIssue objects</returns>
+        /// <exception cref="ArgumentException">If districtNumber is not a 3 digit number</exception>
+        public List<ReportedIssue>? GetBudapestReportedIssuesByDistrict(int districtNumber)
+        {
+            //Check paramZIPCode has 3 Digits
+            if (3 != Math.Floor(Math.Log10(districtNumber) + 1))
+            {
+                throw new ArgumentException("GetBudapestReportedIssuesByDistrict(): Argument districtNumber must be a 3 digit number!");
+            }
+            using (var dbServices = new DBServices())
+            {
+                List<ReportedIssue>? resultList = null;
+                List<ReportedIssue>? resultSubList = null;
+
+                //FETCH All District Region [1..9] inside Given District ReportedIssues Data
+                for (int districtRegionStepper = 1; districtRegionStepper <= 9; districtRegionStepper++)
+                {
+                    resultSubList = null;
+
+                    // 1069 = 106 + [1..9]
+                    int currentDistrictRegion = int.Parse(districtNumber.ToString() + districtRegionStepper.ToString());
+                    resultSubList = dbServices.ReportedIssues.Where(ri => ri.ZipCode == currentDistrictRegion && ri.IsFixed == false).ToList();
+                    if (0 < resultSubList.Count)
+                    {
+                        foreach (var item in resultSubList)
+                        {
+                            resultList?.Add(item);
+                        }
+                    }
+                }
+                
+                return resultList;
+            }
+
         }
     }
 }
