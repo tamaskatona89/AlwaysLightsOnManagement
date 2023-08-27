@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
@@ -145,13 +146,13 @@ namespace AlwaysLightsOnManagement
             }
             using (var dbServices = new DBServices())
             {
-                List<ReportedIssue>? resultList = null;
-                List<ReportedIssue>? resultSubList = null;
+                List<ReportedIssue>? resultList = new();
+                List<ReportedIssue>? resultSubList = new();
 
                 //FETCH All District Region [1..9] inside Given District ReportedIssues Data
                 for (int districtRegionStepper = 1; districtRegionStepper <= 9; districtRegionStepper++)
                 {
-                    resultSubList = null;
+                    resultSubList.Clear();
 
                     // 1069 = 106 + [1..9]
                     int currentDistrictRegion = int.Parse(districtNumber.ToString() + districtRegionStepper.ToString());
@@ -160,14 +161,46 @@ namespace AlwaysLightsOnManagement
                     {
                         foreach (var item in resultSubList)
                         {
-                            resultList?.Add(item);
+                            resultList.Add(item);
                         }
                     }
                 }
-                
+
                 return resultList;
             }
 
+        }
+
+        public List<ReportedIssue>? GetReportedIssuesOlderThan(int dayCount)
+        {
+            using (var dbServices = new DBServices())
+            {
+                //DateTime beforeWhen = DateTime.Today.AddDays(-Double.Parse(dayCount.ToString()));
+                DateTime beforeWhen = DateTime.Today.AddDays(-dayCount);
+
+                //SELECT * FROM dbo.ReportedIssues WHERE Reported_DateTime < '2023.08.26';
+                //var toReturn = dbServices.Database.ExecuteSqlRaw("SELECT * FROM dbo.ReportedIssues WHERE Reported_DateTime < '{0}'",beforeWhen);
+                //var toReturn = dbServices.ReportedIssues.Where(ri => ri.ReportedDateTime < beforeWhen && ri.IsFixed == false).ToList();
+                var toReturn = dbServices.ReportedIssues.Where(ri => ri.ReportedDateTime < beforeWhen && ri.IsFixed == false).ToList();
+                return toReturn;
+            }
+        }
+
+        public void AddFinishedWorkToWorkList(int issueID, int workTypeID, int workerID)
+        {
+            // INSERT INTO WorkList(Issue_ID,WorkType_ID,Worker_ID) VALUES(1,2,2);
+            using (var dbServices = new DBServices())
+            {
+                //dbServices.Database.ExecuteSqlRaw("INSERT INTO WorkList(Issue_ID,WorkType_ID,Worker_ID) VALUES(@issueID,@workTypeID,@workerID)",
+                //    new SqlParameter("Issue_ID", @issueID),
+                //    new SqlParameter("WorkType_ID", @workTypeID),
+                //    new SqlParameter("Worker_ID", @workerID)
+                //);
+
+                dbServices.Database.ExecuteSqlRaw("INSERT INTO WorkList(Issue_ID,WorkType_ID,Worker_ID) Values({0},{1},{2})", issueID, workTypeID, workerID);
+
+
+            }
         }
     }
 }
