@@ -17,5 +17,20 @@ namespace AlwaysLightsOnManagement
         public bool? IsFixed { get; set; }
 
         public virtual ICollection<WorkList> WorkLists { get; set; }
+
+        public override bool Equals(object? obj)
+        {
+            return base.Equals(obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
+        public override string? ToString()
+        {
+            return $"{IssueId}, {ZipCode}, {Address}, {ReportedDateTime}, {IsFixed}";
+        }
     }
 }

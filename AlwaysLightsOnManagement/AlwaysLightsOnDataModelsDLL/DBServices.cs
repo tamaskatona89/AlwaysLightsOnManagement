@@ -181,8 +181,7 @@ namespace AlwaysLightsOnManagement
                 //SELECT * FROM dbo.ReportedIssues WHERE Reported_DateTime < '2023.08.26';
                 //var toReturn = dbServices.Database.ExecuteSqlRaw("SELECT * FROM dbo.ReportedIssues WHERE Reported_DateTime < '{0}'",beforeWhen);
                 //var toReturn = dbServices.ReportedIssues.Where(ri => ri.ReportedDateTime < beforeWhen && ri.IsFixed == false).ToList();
-                var toReturn = dbServices.ReportedIssues.Where(ri => ri.ReportedDateTime < beforeWhen && ri.IsFixed == false).ToList();
-                return toReturn;
+                return dbServices.ReportedIssues.Where(ri => ri.ReportedDateTime.HasValue && ri.ReportedDateTime < beforeWhen && ri.IsFixed == false).ToList();
             }
         }
 
@@ -202,5 +201,7 @@ namespace AlwaysLightsOnManagement
 
             }
         }
+
+      
     }
 }

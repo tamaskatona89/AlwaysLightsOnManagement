@@ -14,5 +14,10 @@ namespace AlwaysLightsOnManagement
         public string FullName { get; set; } = null!;
 
         public virtual ICollection<WorkList> WorkLists { get; set; }
+
+        public override string? ToString()
+        {
+            return $"{WorkerId}, {FullName}";
+        }
     }
 }
