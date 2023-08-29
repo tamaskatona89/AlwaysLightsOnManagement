@@ -112,7 +112,7 @@ namespace AlwaysLightsOnManagement
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 
         /// <summary>
-        /// Returns a list of ReportedIssues in a specified Town/City/Village by a given ZIPCode
+        /// Returns a list of ReportedIssues in a specified Town/City/Village by a given ZIPCode - With Status of IsFixed = False, so It's Open
         /// </summary>
         /// <param name="paramZIPCode">Must be a 4 digit number. Ex.: 3333 for Terpes or 4400 for Nyíregyháza</param>
         /// <returns>List of ReportedIssue objects</returns>
@@ -132,12 +132,12 @@ namespace AlwaysLightsOnManagement
         }
 
         /// <summary>
-        /// Returns a list of ReportedIssues in a specified Budapest district, involved all sub-regions.
+        /// Returns a list of ReportedIssues in a specified Budapest district, involved all sub-regions - With Status of IsFixed = False, so It's Open
         /// </summary>
         /// <param name="districtNumber">Must be a 3 digit number. Ex.: 106 for VI.district</param>
         /// <returns>List of ReportedIssue objects</returns>
         /// <exception cref="ArgumentException">If districtNumber is not a 3 digit number</exception>
-        public List<ReportedIssue>? GetBudapestReportedIssuesByDistrict(int districtNumber)
+        public List<ReportedIssue>? GetBudapestReportedOPENIssuesByDistrict(int districtNumber)
         {
             //Check paramZIPCode has 3 Digits
             if (3 != Math.Floor(Math.Log10(districtNumber) + 1))
@@ -171,6 +171,11 @@ namespace AlwaysLightsOnManagement
 
         }
 
+        /// <summary>
+        /// Returns ReportedIssues from all Hungary - With Status of IsFixed = False, so It's Open && Older than CurrentDate-dayCount
+        /// </summary>
+        /// <param name="dayCount">Days to subtract from CurrentDate</param>
+        /// <returns>List of ReportedIssue objects</returns>
         public List<ReportedIssue>? GetReportedIssuesOlderThan(int dayCount)
         {
             using (var dbServices = new DBServices())
@@ -185,6 +190,12 @@ namespace AlwaysLightsOnManagement
             }
         }
 
+        /// <summary>
+        /// Creates a WorkList entry
+        /// </summary>
+        /// <param name="issueID">Existing ReportedIssues.Issue_ID</param>
+        /// <param name="workTypeID">Existing WorkTypes.WorkType_ID</param>
+        /// <param name="workerID">Existing Worker.Worker_ID</param>
         public void AddFinishedWorkToWorkList(int issueID, int workTypeID, int workerID)
         {
             // INSERT INTO WorkList(Issue_ID,WorkType_ID,Worker_ID) VALUES(1,2,2);
@@ -197,11 +208,34 @@ namespace AlwaysLightsOnManagement
                 //);
 
                 dbServices.Database.ExecuteSqlRaw("INSERT INTO WorkList(Issue_ID,WorkType_ID,Worker_ID) Values({0},{1},{2})", issueID, workTypeID, workerID);
-
-
             }
         }
 
+        public void ReportedIssuesQuery_byNumber_Switch(int number)
+        {
+            //Check number has 2, 3, or 4 accepted Digits
+            if (4 < Math.Floor(Math.Log10(number) + 1) || 2 > Math.Floor(Math.Log10(number) + 1))
+            {
+                throw new ArgumentException("ReportedIssuesQuery_byNumber_Switch(): Argument number must be a 2 or 3 or 4 digit number!");
+            }
+            
+            if (4 == Math.Floor(Math.Log10(number) + 1))
+            {
+                // 4 DIGIT Number
+                GetReportedIssuesByZIPCode(number);
+            }
+            else if (3 == Math.Floor(Math.Log10(number) + 1))
+            {
+                // 3 DIGIT Number
+                GetBudapestReportedOPENIssuesByDistrict(number);
+            }
+            else if (2 == Math.Floor(Math.Log10(number) + 1))
+            {
+                // 2 DIGIT Number
+                GetReportedIssuesOlderThan(number);
+            }
+
+        }
       
     }
 }
