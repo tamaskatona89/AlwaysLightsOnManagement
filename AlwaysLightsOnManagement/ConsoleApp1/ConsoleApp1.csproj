@@ -9,7 +9,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AlwaysLightsOnDataModelsDLL\AlwaysLightsOnDataModelsDLL.csproj" />
-    <ProjectReference Include="..\ConsoleApp1\ConsoleApp1.csproj" />
   </ItemGroup>
 
 </Project>

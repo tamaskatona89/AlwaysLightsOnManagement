@@ -211,29 +211,30 @@ namespace AlwaysLightsOnManagement
             }
         }
 
-        public void ReportedIssuesQuery_byNumber_Switch(int number)
+        public List<ReportedIssue>? ReportedIssuesQuery_byNumber_Switch(int number)
         {
-            //Check number has 2, 3, or 4 accepted Digits
-            if (4 < Math.Floor(Math.Log10(number) + 1) || 2 > Math.Floor(Math.Log10(number) + 1))
+            //Check number has 1, 2, 3, or 4 accepted Digits
+            if (4 < Math.Floor(Math.Log10(number) + 1) || 1 > Math.Floor(Math.Log10(number) + 1))
             {
-                throw new ArgumentException("ReportedIssuesQuery_byNumber_Switch(): Argument number must be a 2 or 3 or 4 digit number!");
+                throw new ArgumentException("ReportedIssuesQuery_byNumber_Switch(): Argument number must be a 1 or 2 or 3 or 4 digit number!");
             }
             
             if (4 == Math.Floor(Math.Log10(number) + 1))
             {
                 // 4 DIGIT Number
-                GetReportedIssuesByZIPCode(number);
+               return GetReportedIssuesByZIPCode(number);
             }
             else if (3 == Math.Floor(Math.Log10(number) + 1))
             {
                 // 3 DIGIT Number
-                GetBudapestReportedOPENIssuesByDistrict(number);
+                return GetBudapestReportedOPENIssuesByDistrict(number);
             }
-            else if (2 == Math.Floor(Math.Log10(number) + 1))
+            else if (2 == Math.Floor(Math.Log10(number) + 1) || 1 == Math.Floor(Math.Log10(number) + 1))
             {
                 // 2 DIGIT Number
-                GetReportedIssuesOlderThan(number);
+                return GetReportedIssuesOlderThan(number);
             }
+            return null;
 
         }
       

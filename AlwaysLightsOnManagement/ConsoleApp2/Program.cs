@@ -1,4 +1,5 @@
 ﻿using AlwaysLightsOnManagement;
+using ConsoleApp1;
 
 namespace ConsoleApp2
 {
@@ -8,21 +9,6 @@ namespace ConsoleApp2
         {
             //DB Handler
             DBServices dBServices = new();
-
-
-            //List<ReportedIssue>? reportedIssues3333 = dBServices.GetReportedIssuesByZIPCode(3333);
-            //List<ReportedIssue>? reportedIssuesBP_VI_District = dBServices.GetBudapestReportedIssuesByDistrict(106);
-
-            //List<ReportedIssue>? issuesOlderThan_2 = dBServices.GetReportedIssuesOlderThan(2);
-            //if (issuesOlderThan_2 is null)
-            //{
-            //    Console.WriteLine("Nincs bejelentés...");
-            //}
-            //else
-            //    foreach (var item in issuesOlderThan_2)
-            //    {
-            //        Console.WriteLine(item);
-            //    }
 
             PrintProgramTitle();
 
@@ -80,7 +66,7 @@ namespace ConsoleApp2
             string input;
             do
             {
-                input = Console.ReadLine()?.ToLower();
+                input = Console.ReadLine()!.ToLower();
                 if ((input == "i") || (input == "n"))
                     break;
 
@@ -121,15 +107,20 @@ namespace ConsoleApp2
         private static int ReportedIssuesInputPrinterAndReader(DBServices dBServices)
         {
             Console.WriteLine("\nHol történt a munkavégzés?");
-            Console.WriteLine("Bejelentett lezáratlan hibahelyszínek listája:\n");
-            List<ReportedIssue> reportedIssues = dBServices.ReportedIssues.Where(ri => ri.IsFixed == false).ToList();
-            Console.WriteLine(String.Format("{0,-13}{1,10}{2,60}", "Helyszín kód", "Ir.szám", "Cím"));
-            Console.WriteLine("═══════════════════════════════════════════════════════════════════════════════════");
-            foreach (var reportedIssue in reportedIssues)
-            {
-                Console.WriteLine(String.Format("{0,-13}{1,10}{2,60}", reportedIssue.IssueId, reportedIssue.ZipCode, reportedIssue.Address));
-            }
-            Console.WriteLine("═══════════════════════════════════════════════════════════════════════════════════");
+
+            ConsoleApp1.Program.ReportedIssuesList_InputReader_and_ListPrinter(dBServices);
+            
+            //Console.WriteLine("Bejelentett lezáratlan hibahelyszínek listája:\n");
+            //List<ReportedIssue> reportedIssues = dBServices.ReportedIssues.Where(ri => ri.IsFixed == false).ToList();
+            //Console.WriteLine(String.Format("{0,-13}{1,10}{2,60}", "Helyszín kód", "Ir.szám", "Cím"));
+            //Console.WriteLine("═══════════════════════════════════════════════════════════════════════════════════");
+            //foreach (var reportedIssue in reportedIssues)
+            //{
+            //    Console.WriteLine(String.Format("{0,-13}{1,10}{2,60}", reportedIssue.IssueId, reportedIssue.ZipCode, reportedIssue.Address));
+            //}
+            //Console.WriteLine("═══════════════════════════════════════════════════════════════════════════════════");
+
+
             Console.Write("Hol történt? (Helyszín kódja) > ");
             List<int> acceptableIssueIDs = dBServices.ReportedIssues.Select(ri => ri.IssueId).ToList();
             int selectedIssueID = ReportedIssueIDReader(acceptableIssueIDs);
