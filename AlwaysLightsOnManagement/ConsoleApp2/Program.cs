@@ -105,15 +105,25 @@ namespace ConsoleApp2
 
         private static int ReportedIssuesInputPrinterAndReader(DBServices dBServices)
         {
-            Console.WriteLine("\nHol történt a munkavégzés?");
-            Console.WriteLine("══════════════════════════");
+            while (true)
+            {
+                Console.WriteLine("\nHol történt a munkavégzés?");
+                Console.WriteLine("══════════════════════════");
+                int resultListHasEntries = ConsoleApp1.Program.ReportedIssuesList_InputReader_and_ListPrinter(dBServices);
 
-            ConsoleApp1.Program.ReportedIssuesList_InputReader_and_ListPrinter(dBServices);
-            
-            Console.Write("Hol történt? (Helyszín kódja) > ");
-            List<int> acceptableIssueIDs = dBServices.ReportedIssues.Select(ri => ri.IssueId).ToList();
-            int selectedIssueID = ReportedIssueIDReader(acceptableIssueIDs);
-            return selectedIssueID;
+                if (resultListHasEntries == -1)
+                {
+                    Console.Error.WriteLine("Nincs kiválasztható listaelem.\nÜss ENTER-t és szűrj más értékre!"); Console.ReadLine();
+                    continue;
+                }
+                else
+                {
+                    Console.Write("Hol történt? (Helyszín kódja) > ");
+                    List<int> acceptableIssueIDs = dBServices.ReportedIssues.Select(ri => ri.IssueId).ToList();
+                    int selectedIssueID = ReportedIssueIDReader(acceptableIssueIDs);
+                    return selectedIssueID;
+                }
+            }
         }
 
         private static int ReportedIssueIDReader(List<int> acceptableIssueIDs)

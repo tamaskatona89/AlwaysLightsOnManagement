@@ -37,7 +37,7 @@ namespace ConsoleApp1
             } while (true);
             return input;
         }
-        public static void ReportedIssuesList_InputReader_and_ListPrinter(DBServices dBServices)
+        public static int ReportedIssuesList_InputReader_and_ListPrinter(DBServices dBServices)
         {
             //PRINT MENU
             Console.WriteLine(" 4  számjegy = Országos           Lekérdezés Irányítószám alapján,");
@@ -49,6 +49,11 @@ namespace ConsoleApp1
             Console.Write("Lekérdezés indítása >");
             var resultList = dBServices.ReportedIssuesQuery_byNumber_Switch(Int32.Parse(Console.ReadLine()!));
             ReportedIssuesListPrinter(resultList);
+            if (0 == resultList?.Count)
+                return -1;
+            else
+                return 1;
+
         }
 
         public static void ReportedIssuesListPrinter(List<ReportedIssue>? resultList)
