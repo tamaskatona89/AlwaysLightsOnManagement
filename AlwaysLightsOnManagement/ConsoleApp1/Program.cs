@@ -12,7 +12,7 @@ namespace ConsoleApp1
             {
                 PrintProgramTitle();
                 ReportedIssuesList_InputReader_and_ListPrinter(dBServices);
-                Console.Write("Szeretne új lekérdezést indítani? >"); string wantNewQuery = GetUserInput_YES_NO();
+                Console.Write("Szeretne új lekérdezést indítani? (i/n)>"); string wantNewQuery = GetUserInput_YES_NO();
                 if (wantNewQuery.Equals("i"))
                 {
                     Console.Clear();
@@ -39,11 +39,13 @@ namespace ConsoleApp1
         }
         public static void ReportedIssuesList_InputReader_and_ListPrinter(DBServices dBServices)
         {
+            //PRINT MENU
             Console.WriteLine(" 4  számjegy = Országos           Lekérdezés Irányítószám alapján,");
             Console.WriteLine(" 3  számjegy = BUDAPESTI-Kerületi Lekérdezés 1[KerSzám] alapján, Üssön 1-et követve a Kerület számával,");
             Console.WriteLine("1-2 számjegy = Országos           Lekérdezés régiség szerint, Most-[Napokszáma]-nál régebben bejelentettek,");
             Console.WriteLine("                                  Ekkor nem lesz mutatva az elmúlt [Napokszáma], csak az ettől korábbiak  .");
 
+            //READ INPUT
             Console.Write("Lekérdezés indítása >");
             var resultList = dBServices.ReportedIssuesQuery_byNumber_Switch(Int32.Parse(Console.ReadLine()!));
             ReportedIssuesListPrinter(resultList);

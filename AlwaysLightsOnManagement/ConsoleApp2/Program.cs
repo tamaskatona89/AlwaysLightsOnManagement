@@ -58,7 +58,6 @@ namespace ConsoleApp2
                 }
             }
             Console.WriteLine("Program vége.");
-
         }
 
         private static string GetUserInput_YES_NO()
@@ -107,20 +106,10 @@ namespace ConsoleApp2
         private static int ReportedIssuesInputPrinterAndReader(DBServices dBServices)
         {
             Console.WriteLine("\nHol történt a munkavégzés?");
+            Console.WriteLine("══════════════════════════");
 
             ConsoleApp1.Program.ReportedIssuesList_InputReader_and_ListPrinter(dBServices);
             
-            //Console.WriteLine("Bejelentett lezáratlan hibahelyszínek listája:\n");
-            //List<ReportedIssue> reportedIssues = dBServices.ReportedIssues.Where(ri => ri.IsFixed == false).ToList();
-            //Console.WriteLine(String.Format("{0,-13}{1,10}{2,60}", "Helyszín kód", "Ir.szám", "Cím"));
-            //Console.WriteLine("═══════════════════════════════════════════════════════════════════════════════════");
-            //foreach (var reportedIssue in reportedIssues)
-            //{
-            //    Console.WriteLine(String.Format("{0,-13}{1,10}{2,60}", reportedIssue.IssueId, reportedIssue.ZipCode, reportedIssue.Address));
-            //}
-            //Console.WriteLine("═══════════════════════════════════════════════════════════════════════════════════");
-
-
             Console.Write("Hol történt? (Helyszín kódja) > ");
             List<int> acceptableIssueIDs = dBServices.ReportedIssues.Select(ri => ri.IssueId).ToList();
             int selectedIssueID = ReportedIssueIDReader(acceptableIssueIDs);
