@@ -28,41 +28,64 @@ namespace ConsoleApp2
 
             //GATHER ID-s from User Input
             int selectedWorkerID = WorkersListInputPrinterAndReader(dBServices);
-        SelectNewReportedIssue:
-            int selectedIssueID = ReportedIssuesInputPrinterAndReader(dBServices);
-        SelectTheWorkType:
-            int selectedWorkTypeID = WorkTypesInputPrinterAndReader(dBServices);
+            bool reportedIssue_MENU_ExitFlag = false;
+            bool workType_MENU_ExitFlag = false;
 
-            //INSERT INTO DB with the Collected ID-s
-            //INSERT INTO WorkList(Issue_ID,WorkType_ID,Worker_ID) VALUES(1,2,2);
-            dBServices.AddFinishedWorkToWorkList(selectedIssueID, selectedWorkTypeID, selectedWorkerID);
-            dBServices.SaveChanges();
-        OtherJobsQuestion:
-            Console.Write("\nMUNKAVéGZéS MENTVE!\nVolt még egyéb teendő ugyanitt? (i/n) (...egyéb=Kilép) >");
-            string menuSelected = Console.ReadLine();
-            if (menuSelected.Equals("i"))
+            while (!reportedIssue_MENU_ExitFlag)
             {
-                goto SelectTheWorkType;
-            }
-            if (menuSelected.Equals("n"))
-            {
-                //SET CURRENT ReportedIssue to isFixed=TRUE and SELECT NEW ReportedIssue
-                //SET CURRENT WORK ReportedIssue IsFixed State --> true
-                dBServices.ReportedIssues.First(ri => ri.IssueId == selectedIssueID).IsFixed = true;
-                dBServices.SaveChanges();
-                Console.WriteLine("Aktuális hibahelyszín lezárva! Javítás befejezett !");
+                int selectedIssueID = ReportedIssuesInputPrinterAndReader(dBServices);
 
-                goto SelectNewReportedIssue;
-            }
+                while (!workType_MENU_ExitFlag)
+                {
+                    int selectedWorkTypeID = WorkTypesInputPrinterAndReader(dBServices);
 
-            //SET CURRENT ReportedIssue to isFixed=TRUE and SELECT NEW ReportedIssue
-            //SET CURRENT WORK ReportedIssue IsFixed State --> true
-            dBServices.ReportedIssues.First(ri => ri.IssueId == selectedIssueID).IsFixed = true;
-            dBServices.SaveChanges();
-            Console.WriteLine("Aktuális hibahelyszín lezárva! Javítás befejezett !");
+                    //INSERT INTO DB with the Collected ID-s
+                    //INSERT INTO WorkList(Issue_ID,WorkType_ID,Worker_ID) VALUES(1,2,2);
+                    dBServices.AddFinishedWorkToWorkList(selectedIssueID, selectedWorkTypeID, selectedWorkerID);
+                    dBServices.SaveChanges();
+
+                    // OtherJobsQuestion for the Same Issue
+                    Console.Write("\nMUNKAVéGZéS MENTVE!\nVolt még egyéb teendő ugyanitt? (i/n) >");
+                    string workType_menuSelected = GetUserInput_YES_NO();
+                    if (workType_menuSelected.Equals("i"))
+                        continue;
+                    if (workType_menuSelected.Equals("n"))
+                    {
+                        //SET CURRENT ReportedIssue to isFixed=TRUE and SELECT NEW ReportedIssue
+                        //SET CURRENT WORK ReportedIssue IsFixed State --> true
+                        dBServices.ReportedIssues.First(ri => ri.IssueId == selectedIssueID).IsFixed = true;
+                        dBServices.SaveChanges();
+                        Console.WriteLine("Aktuális hibahelyszín lezárva! Javítás befejezett !");
+                        break;
+                    }
+                }
+
+                // Question for new Issue
+                Console.Write("\nVálaszt másik hibahelyszínt?\nÚj helyszín=(i), kilép=(n) (i/n) >");
+                string reportedIssue_menuSelected = GetUserInput_YES_NO();
+                if (reportedIssue_menuSelected.Equals("i"))
+                    continue;
+                if (reportedIssue_menuSelected.Equals("n"))
+                {
+                    reportedIssue_MENU_ExitFlag = true;
+                    break;
+                }
+            }
             Console.WriteLine("Program vége.");
 
+        }
 
+        private static string GetUserInput_YES_NO()
+        {
+            string input;
+            do
+            {
+                input = Console.ReadLine()?.ToLower();
+                if ((input == "i") || (input == "n"))
+                    break;
+
+            } while (true);
+            return input;
         }
 
         private static int WorkTypesInputPrinterAndReader(DBServices dBServices)
