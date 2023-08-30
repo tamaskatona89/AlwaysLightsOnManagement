@@ -1,0 +1,50 @@
+﻿<Window x:Class="Desktop_UI.MainWindow" x:Name="MainProgramWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Desktop_UI"
+        mc:Ignorable="d"
+        Title="Mindig Fényes Kft - Adminisztrátori felület" Height="720" Width="1280" ResizeMode="NoResize">
+    <Grid>
+
+        <Grid HorizontalAlignment="Left" Width="260">
+
+
+            <Label x:Name="label" Content="Év:" HorizontalAlignment="Left" Margin="25,22,0,632" Width="38"/>
+            <TextBox x:Name="year_textBox" HorizontalAlignment="Left" Margin="75,22,0,632" TextWrapping="Wrap" Text="Ev" Width="57" Loaded="year_textBox_Loaded"/>
+            <Label x:Name="label1" Content="Hónap:" HorizontalAlignment="Left" Margin="25,59,0,0" VerticalAlignment="Top" Height="42"/>
+            <ComboBox x:Name="month_comboBox" HorizontalAlignment="Left" Margin="78,64,0,0" VerticalAlignment="Top" Width="142">
+                <ComboBoxItem Content="Január" Tag="1"/>
+                <ComboBoxItem Content="Február" Tag="2"/>
+                <ComboBoxItem Content="Március" Tag="3"/>
+                <ComboBoxItem Content="Április" Tag="4"/>
+                <ComboBoxItem Content="Május" Tag="5"/>
+                <ComboBoxItem Content="Június" Tag="6"/>
+                <ComboBoxItem Content="Július" Tag="7"/>
+                <ComboBoxItem Content="Augusztus" Tag="8"/>
+                <ComboBoxItem Content="Szeptember" Tag="9"/>
+                <ComboBoxItem Content="Október" Tag="10"/>
+                <ComboBoxItem Content="November" Tag="11"/>
+                <ComboBoxItem Content="December" Tag="12"/>
+                
+
+            </ComboBox>
+
+        </Grid>
+
+        <GroupBox x:Name="groupByWorkType_groupBox" Header="Munkatípus szerinti Lista" Margin="10,258,1034,226"/>
+        <ListView x:Name="monthlyAndWorker_listView" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="264,19,207,226">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Munka azon." Width="100" x:Name="WorkList_ID"/>
+                    <GridViewColumn Header="Helyszín" Width="250" x:Name="Issue_ID"/>
+                    <GridViewColumn Header="Elvégzett munka" Width="150" x:Name="WorkType_ID"/>
+                    <GridViewColumn Header="Dolgozó" Width="150" x:Name="Worker_ID"/>
+                    <GridViewColumn Header="Javítás ideje" Width="150" x:Name="Fixing_DateTime"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+    </Grid>
+</Window>
