@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using AlwaysLightsOnManagement;
+using Microsoft.EntityFrameworkCore;
 
 namespace Desktop_UI
 {
@@ -20,9 +22,12 @@ namespace Desktop_UI
     /// </summary>
     public partial class MainWindow : Window
     {
+        public DBServices DBServicesInstance { get; set; } = new DBServices();
         public MainWindow()
         {
             InitializeComponent();
+            
+
         }
 
         private void year_textBox_Loaded(object sender, RoutedEventArgs e)
@@ -30,6 +35,11 @@ namespace Desktop_UI
             year_textBox.Text = DateTime.Now.Year.ToString();
         }
 
-       
+        private void queryButton_Click(object sender, RoutedEventArgs e)
+        {
+            DBServicesInstance.ChangeTracker.LazyLoadingEnabled = true;
+            List<WorkList> resultList = DBServicesInstance.WorkLists.ToList();
+            dataGrid.ItemsSource = resultList;
+        }
     }
 }

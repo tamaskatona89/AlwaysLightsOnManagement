@@ -15,7 +15,7 @@
             <TextBox x:Name="year_textBox" HorizontalAlignment="Left" Margin="75,22,0,632" TextWrapping="Wrap" Text="Ev" Width="57" Loaded="year_textBox_Loaded"/>
             <Label x:Name="label1" Content="Hónap:" HorizontalAlignment="Left" Margin="25,59,0,0" VerticalAlignment="Top" Height="42"/>
             <ComboBox x:Name="month_comboBox" HorizontalAlignment="Left" Margin="78,64,0,0" VerticalAlignment="Top" Width="142">
-                <ComboBoxItem Content="Január" Tag="1"/>
+                <ComboBoxItem Content="Január" Tag="1" IsSelected="True"/>
                 <ComboBoxItem Content="Február" Tag="2"/>
                 <ComboBoxItem Content="Március" Tag="3"/>
                 <ComboBoxItem Content="Április" Tag="4"/>
@@ -27,14 +27,19 @@
                 <ComboBoxItem Content="Október" Tag="10"/>
                 <ComboBoxItem Content="November" Tag="11"/>
                 <ComboBoxItem Content="December" Tag="12"/>
-                
+
 
             </ComboBox>
+            <Button x:Name="queryButton" Content="Lekérdezés indítása" HorizontalAlignment="Left" Margin="78,177,0,0" VerticalAlignment="Top" Click="queryButton_Click"/>
+
+
 
         </Grid>
 
         <GroupBox x:Name="groupByWorkType_groupBox" Header="Munkatípus szerinti Lista" Margin="10,258,1034,226"/>
-        <ListView x:Name="monthlyAndWorker_listView" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="264,19,207,226">
+        <DataGrid x:Name="dataGrid" Margin="276,0,0,0"/>
+
+        <!--<ListView x:Name="monthlyAndWorker_listView" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="264,19,207,226">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Munka azon." Width="100" x:Name="WorkList_ID"/>
@@ -44,7 +49,7 @@
                     <GridViewColumn Header="Javítás ideje" Width="150" x:Name="Fixing_DateTime"/>
                 </GridView>
             </ListView.View>
-        </ListView>
+        </ListView>-->
 
     </Grid>
 </Window>
