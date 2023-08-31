@@ -239,7 +239,7 @@ namespace AlwaysLightsOnManagement
 
         }
 
-        public List<ExportableWorkList> GetWorkListByMonth(int monthNumber)
+        public List<ExportableWorkList> GetWorkListByMonth(int yearNumber,int monthNumber)
         {
             using (var dbServices = new DBServices())
             {
@@ -247,7 +247,7 @@ namespace AlwaysLightsOnManagement
                                            join ri in dbServices.ReportedIssues on wl.IssueId equals ri.IssueId
                                            join wt in dbServices.WorkTypes on wl.WorkTypeId equals wt.WorkTypeId
                                            join wker in dbServices.Workers on wl.WorkerId equals wker.WorkerId
-                                           where wl.FixingDateTime.HasValue && wl.FixingDateTime.Value.Month == monthNumber
+                                           where wl.FixingDateTime.HasValue && wl.FixingDateTime.Value.Year == yearNumber && wl.FixingDateTime.Value.Month == monthNumber
                                            select new ExportableWorkList(Int32.Parse(wl.WorkListId.ToString()),
                                                                          ri.ZipCode.ToString() + " " + ri.Address.ToString(),
                                                                           wt.WorkTypeDescription.ToString(),

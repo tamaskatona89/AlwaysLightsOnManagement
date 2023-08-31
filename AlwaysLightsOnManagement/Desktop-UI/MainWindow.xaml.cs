@@ -40,11 +40,13 @@ namespace Desktop_UI
         private void queryButton_Click(object sender, RoutedEventArgs e)
         {
             //DBServicesInstance.ChangeTracker.LazyLoadingEnabled = true;
-            List<ExportableWorkList> resultList = DBServicesInstance.GetWorkListByMonth(8);
+
+            int month_ComboBox_Value = month_comboBox.SelectedIndex + 1;
+            List<ExportableWorkList> resultList = DBServicesInstance.GetWorkListByMonth(2023,month_ComboBox_Value);
 
             dataGrid.ItemsSource = resultList;
         }
 
-        
+
     }
 }
