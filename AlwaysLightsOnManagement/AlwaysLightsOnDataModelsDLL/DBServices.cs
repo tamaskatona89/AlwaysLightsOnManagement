@@ -266,6 +266,33 @@ namespace AlwaysLightsOnManagement
             }
         }
 
+        public List<ExportableWorkList> GetWorkListByWorkerIDAndMonth(int workerID,int yearNumber, int monthNumber)
+        {
+            using (var dbServices = new DBServices())
+            {
+                var resultList_interface = from wl in dbServices.WorkLists
+                                           join ri in dbServices.ReportedIssues on wl.IssueId equals ri.IssueId
+                                           join wt in dbServices.WorkTypes on wl.WorkTypeId equals wt.WorkTypeId
+                                           join wker in dbServices.Workers on wl.WorkerId equals wker.WorkerId
+                                           where wl.FixingDateTime.HasValue && wl.FixingDateTime.Value.Year == yearNumber && wl.FixingDateTime.Value.Month == monthNumber && wker.WorkerId == workerID
+                                           select new ExportableWorkList(Int32.Parse(wl.WorkListId.ToString()),
+                                                                         ri.ZipCode.ToString() + " " + ri.Address.ToString(),
+                                                                          wt.WorkTypeDescription.ToString(),
+                                                                         wker.FullName.ToString(),
+                                                                        wl.FixingDateTime!.Value);
+
+                // COPY resultList_interface --> (ExportableWorkList) resultList what WPF DataGrid can only handle, or put ZERO result message to it.
+                List<ExportableWorkList> resultList = new List<ExportableWorkList>();
+                if (resultList_interface.Any())
+                    foreach (var item in resultList_interface)
+                        resultList.Add(item);
+                else
+                    resultList.Add(new ExportableWorkList(0, "A lekérdezés nem hozott eredményt...", "-", "-", DateTime.Now));
+
+                return resultList;
+            }
+        }
+
         public List<Worker>? GetWorkers()
         {
             using (var dbServices = new DBServices())

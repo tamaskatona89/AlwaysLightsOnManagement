@@ -43,7 +43,18 @@ namespace Desktop_UI
 
             int month_ComboBox_Value = month_comboBox.SelectedIndex + 1;
             int year_TextBox_Value = Int32.Parse(year_textBox.Text.ToString());
-            List<ExportableWorkList> resultList = DBServicesInstance.GetWorkListByMonth(year_TextBox_Value, month_ComboBox_Value);
+            int worker_ComboBox_Value = Int32.Parse(worker_comboBox.SelectedValue.ToString()!);
+
+            List<ExportableWorkList> resultList = new();
+            if (worker_ComboBox_Value == 0)
+            {
+                resultList = DBServicesInstance.GetWorkListByMonth(year_TextBox_Value, month_ComboBox_Value);
+            }
+            else
+            {
+                //GOT OTHER Existing WorkerID
+                resultList = DBServicesInstance.GetWorkListByWorkerIDAndMonth(worker_ComboBox_Value,year_TextBox_Value, month_ComboBox_Value);
+            }
 
             dataGrid.ItemsSource = resultList;
         }
@@ -58,6 +69,11 @@ namespace Desktop_UI
             worker_comboBox.SelectedValuePath = "WorkerId";
             worker_comboBox.ItemsSource = workerList;
             worker_comboBox.SelectedIndex = 0;
+        }
+
+        private void month_comboBox_Loaded(object sender, RoutedEventArgs e)
+        {
+            month_comboBox.SelectedIndex = DateTime.Now.Month-1;
         }
     }
 }

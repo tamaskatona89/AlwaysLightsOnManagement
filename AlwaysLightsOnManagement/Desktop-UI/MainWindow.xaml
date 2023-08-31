@@ -14,7 +14,7 @@
             <Label x:Name="label" Content="Év:" HorizontalAlignment="Left" Margin="12,22,0,632" Width="38"/>
             <TextBox x:Name="year_textBox" HorizontalAlignment="Left" Margin="75,22,0,632" TextWrapping="Wrap" Text="Ev" Width="57" Loaded="year_textBox_Loaded"/>
             <Label x:Name="label1" Content="Hónap:" HorizontalAlignment="Left" Margin="12,59,0,0" VerticalAlignment="Top" Height="42"/>
-            <ComboBox x:Name="month_comboBox" HorizontalAlignment="Left" Margin="75,64,0,0" VerticalAlignment="Top" Width="166">
+            <ComboBox x:Name="month_comboBox" HorizontalAlignment="Left" Margin="75,64,0,0" VerticalAlignment="Top" Width="166" Loaded="month_comboBox_Loaded">
                 <ComboBoxItem Content="Január" Tag="1" IsSelected="True"/>
                 <ComboBoxItem Content="Február" Tag="2"/>
                 <ComboBoxItem Content="Március" Tag="3"/>
@@ -30,15 +30,16 @@
 
 
             </ComboBox>
-            <Button x:Name="queryButton" Content="Lekérdezés indítása" HorizontalAlignment="Left" Margin="78,177,0,0" VerticalAlignment="Top" Click="queryButton_Click"/>
+            <Button x:Name="queryButton" Content="Lekérdezés indítása" HorizontalAlignment="Center" Margin="0,177,0,0" VerticalAlignment="Top" Click="queryButton_Click"/>
             <Label x:Name="label2" Content="Dolgozó:" HorizontalAlignment="Left" Margin="12,101,0,0" VerticalAlignment="Top"/>
             <ComboBox x:Name="worker_comboBox" HorizontalAlignment="Left" Margin="75,106,0,0" VerticalAlignment="Top" Width="166" Loaded="worker_comboBox_Loaded"/>
+            <GroupBox x:Name="groupBox" Header="Dolgozói-és Havi Lista" Margin="5,0,-5,448"/>
 
 
 
         </Grid>
 
-        <GroupBox x:Name="groupByWorkType_groupBox" Header="Munkatípus szerinti Lista" Margin="10,258,1034,226"/>
+        <GroupBox x:Name="groupByWorkType_groupBox" Header="Munkatípus szerinti Lista" Margin="10,280,1010,204"/>
         <DataGrid x:Name="dataGrid" Margin="276,0,0,0" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Sorszám" Binding="{Binding WorkListID}"/>
