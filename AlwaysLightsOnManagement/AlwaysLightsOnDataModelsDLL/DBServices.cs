@@ -128,7 +128,7 @@ namespace AlwaysLightsOnManagement
             using (var dbServices = new DBServices())
             {
                 //FETCH Matched ReportedIssues Data
-                return dbServices.ReportedIssues.Where(ri => ri.ZipCode == paramZIPCode && ri.IsFixed == false).ToList();
+                return dbServices.ReportedIssues.Where(ri => ri.ZipCode == paramZIPCode && ri.IsFixed == false).OrderBy(ri => ri.ReportedDateTime).ToList();
             }
         }
 
@@ -157,7 +157,7 @@ namespace AlwaysLightsOnManagement
 
                     // 1069 = 106 + [1..9]
                     int currentDistrictRegion = int.Parse(districtNumber.ToString() + districtRegionStepper.ToString());
-                    resultSubList = dbServices.ReportedIssues.Where(ri => ri.ZipCode == currentDistrictRegion && ri.IsFixed == false).ToList();
+                    resultSubList = dbServices.ReportedIssues.Where(ri => ri.ZipCode == currentDistrictRegion && ri.IsFixed == false).OrderBy(ri => ri.ReportedDateTime).ToList();
                     if (0 < resultSubList.Count)
                     {
                         foreach (var item in resultSubList)
@@ -187,7 +187,7 @@ namespace AlwaysLightsOnManagement
                 //SELECT * FROM dbo.ReportedIssues WHERE Reported_DateTime < '2023.08.26';
                 //var toReturn = dbServices.Database.ExecuteSqlRaw("SELECT * FROM dbo.ReportedIssues WHERE Reported_DateTime < '{0}'",beforeWhen);
                 //var toReturn = dbServices.ReportedIssues.Where(ri => ri.ReportedDateTime < beforeWhen && ri.IsFixed == false).ToList();
-                return dbServices.ReportedIssues.Where(ri => ri.ReportedDateTime.HasValue && ri.ReportedDateTime < beforeWhen && ri.IsFixed == false).ToList();
+                return dbServices.ReportedIssues.Where(ri => ri.ReportedDateTime.HasValue && ri.ReportedDateTime < beforeWhen && ri.IsFixed == false).OrderBy(ri => ri.ReportedDateTime).ToList();
             }
         }
 
