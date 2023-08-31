@@ -48,14 +48,16 @@ namespace Desktop_UI
             List<ExportableWorkList> resultList = new();
             if (worker_ComboBox_Value == 0)
             {
+                //NO WORKER SELECTED - Show Monthly list with ALL Workers
                 resultList = DBServicesInstance.GetWorkListByMonth(year_TextBox_Value, month_ComboBox_Value);
             }
             else
             {
-                //GOT OTHER Existing WorkerID
+                //GOT OTHER Existing WorkerID - Show Selected Worker's WorkList
                 resultList = DBServicesInstance.GetWorkListByWorkerIDAndMonth(worker_ComboBox_Value,year_TextBox_Value, month_ComboBox_Value);
             }
 
+            //SET DataGrid Source to resultList
             dataGrid.ItemsSource = resultList;
         }
 

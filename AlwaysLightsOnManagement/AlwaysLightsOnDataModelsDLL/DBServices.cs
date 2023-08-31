@@ -212,6 +212,12 @@ namespace AlwaysLightsOnManagement
             }
         }
 
+        /// <summary>
+        /// GetReportedIssues Switcher. Calls other GetReportedIssue methods depends on inputNumber digits. 1-2-3-or 4
+        /// </summary>
+        /// <param name="number">1-2-3-or 4 digit only int number</param>
+        /// <returns>Call a GetReportedIssue... method with inputNumber</returns>
+        /// <exception cref="ArgumentException"></exception>
         public List<ReportedIssue>? ReportedIssuesQuery_byNumber_Switch(int number)
         {
             //Check number has 1, 2, 3, or 4 accepted Digits
@@ -239,6 +245,12 @@ namespace AlwaysLightsOnManagement
 
         }
 
+        /// <summary>
+        /// Get finished WorkList completed by Workers based on given Year and Month
+        /// </summary>
+        /// <param name="yearNumber">int Year, ex.: 2023</param>
+        /// <param name="monthNumber">int Month, ex.: 8</param>
+        /// <returns>List of ExportableWorkList objects</returns>
         public List<ExportableWorkList> GetWorkListByMonth(int yearNumber,int monthNumber)
         {
             using (var dbServices = new DBServices())
@@ -266,6 +278,13 @@ namespace AlwaysLightsOnManagement
             }
         }
 
+        /// <summary>
+        /// Get finished WorkList completed by Workers based on given existing WorkerID, Year, and Month
+        /// </summary>
+        /// <param name="workerID">int existing WorkerID, ex.: 1</param>
+        /// <param name="yearNumber">int Year, ex.: 2023</param>
+        /// <param name="monthNumber">int Month, ex.: 8</param>
+        /// <returns>List of ExportableWorkList objects</returns>
         public List<ExportableWorkList> GetWorkListByWorkerIDAndMonth(int workerID,int yearNumber, int monthNumber)
         {
             using (var dbServices = new DBServices())
@@ -293,6 +312,10 @@ namespace AlwaysLightsOnManagement
             }
         }
 
+        /// <summary>
+        /// Get Workers from Workers DB-Table 
+        /// </summary>
+        /// <returns>List of Worker object</returns>
         public List<Worker>? GetWorkers()
         {
             using (var dbServices = new DBServices())
