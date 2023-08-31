@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using AlwaysLightsOnDataModelsDLL;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
@@ -218,11 +219,11 @@ namespace AlwaysLightsOnManagement
             {
                 throw new ArgumentException("ReportedIssuesQuery_byNumber_Switch(): Argument number must be a 1 or 2 or 3 or 4 digit number!");
             }
-            
+
             if (4 == Math.Floor(Math.Log10(number) + 1))
             {
                 // 4 DIGIT Number
-               return GetReportedIssuesByZIPCode(number);
+                return GetReportedIssuesByZIPCode(number);
             }
             else if (3 == Math.Floor(Math.Log10(number) + 1))
             {
@@ -237,6 +238,33 @@ namespace AlwaysLightsOnManagement
             return null;
 
         }
-      
+
+        public List<ExportableWorkList> GetWorkListByMonth(int monthNumber)
+        {
+            using (var dbServices = new DBServices())
+            {
+                var resultList_interface = from wl in dbServices.WorkLists
+                                           join ri in dbServices.ReportedIssues on wl.IssueId equals ri.IssueId
+                                           join wt in dbServices.WorkTypes on wl.WorkTypeId equals wt.WorkTypeId
+                                           join wker in dbServices.Workers on wl.WorkerId equals wker.WorkerId
+                                           where wl.FixingDateTime.HasValue && wl.FixingDateTime.Value.Month == monthNumber
+                                           select new ExportableWorkList(Int32.Parse(wl.WorkListId.ToString()),
+                                                                         ri.ZipCode.ToString() + " " + ri.Address.ToString(),
+                                                                          wt.WorkTypeDescription.ToString(),
+                                                                         wker.FullName.ToString(),
+                                                                        wl.FixingDateTime!.Value);
+
+                // COPY resultList_interface --> (ExportableWorkList) resultList what WPF DataGrid can only handle, or put ZERO result message to it.
+                List<ExportableWorkList> resultList = new List<ExportableWorkList>();
+                if (resultList_interface.Any())
+                    foreach (var item in resultList_interface)
+                        resultList.Add(item);
+                else
+                    resultList.Add(new ExportableWorkList(0, "A lekérdezés nem hozott eredményt...", "-", "-", DateTime.Now));
+
+                return resultList;
+            }
+        }
+
     }
 }

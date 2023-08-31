@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using AlwaysLightsOnDataModelsDLL;
 using AlwaysLightsOnManagement;
 using Microsoft.EntityFrameworkCore;
 
@@ -26,7 +28,7 @@ namespace Desktop_UI
         public MainWindow()
         {
             InitializeComponent();
-            
+
 
         }
 
@@ -37,9 +39,12 @@ namespace Desktop_UI
 
         private void queryButton_Click(object sender, RoutedEventArgs e)
         {
-            DBServicesInstance.ChangeTracker.LazyLoadingEnabled = true;
-            List<WorkList> resultList = DBServicesInstance.WorkLists.ToList();
+            //DBServicesInstance.ChangeTracker.LazyLoadingEnabled = true;
+            List<ExportableWorkList> resultList = DBServicesInstance.GetWorkListByMonth(8);
+
             dataGrid.ItemsSource = resultList;
         }
+
+        
     }
 }

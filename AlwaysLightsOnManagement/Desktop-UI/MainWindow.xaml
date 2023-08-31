@@ -37,7 +37,15 @@
         </Grid>
 
         <GroupBox x:Name="groupByWorkType_groupBox" Header="Munkatípus szerinti Lista" Margin="10,258,1034,226"/>
-        <DataGrid x:Name="dataGrid" Margin="276,0,0,0"/>
+        <DataGrid x:Name="dataGrid" Margin="276,0,0,0" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Sorszám" Binding="{Binding WorkListID}"/>
+                <DataGridTextColumn Header="Helyszín" Binding="{Binding ReportedIssue}"/>
+                <DataGridTextColumn Header="Munkavégzés fajtája" Binding="{Binding WorkType}"/>
+                <DataGridTextColumn Header="Munkát végezte" Binding="{Binding Worker}"/>
+                <DataGridTextColumn Header="Munka időpontja" Binding="{Binding FixingDateTime}"/>
+            </DataGrid.Columns>
+        </DataGrid>
 
         <!--<ListView x:Name="monthlyAndWorker_listView" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="264,19,207,226">
             <ListView.View>
