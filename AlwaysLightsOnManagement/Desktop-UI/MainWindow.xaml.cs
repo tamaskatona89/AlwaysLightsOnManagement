@@ -42,11 +42,22 @@ namespace Desktop_UI
             //DBServicesInstance.ChangeTracker.LazyLoadingEnabled = true;
 
             int month_ComboBox_Value = month_comboBox.SelectedIndex + 1;
-            List<ExportableWorkList> resultList = DBServicesInstance.GetWorkListByMonth(2023,month_ComboBox_Value);
+            int year_TextBox_Value = Int32.Parse(year_textBox.Text.ToString());
+            List<ExportableWorkList> resultList = DBServicesInstance.GetWorkListByMonth(year_TextBox_Value, month_ComboBox_Value);
 
             dataGrid.ItemsSource = resultList;
         }
 
+        private void worker_comboBox_Loaded(object sender, RoutedEventArgs e)
+        {
+            //GET Workers from DB and Display them in worker_comboBox
+            List<Worker>? workerList = DBServicesInstance.GetWorkers();
+            workerList?.Insert(0,new Worker { WorkerId=0, FullName="<< Összes Dolgozó >>"});
 
+            worker_comboBox.DisplayMemberPath = "FullName";
+            worker_comboBox.SelectedValuePath = "WorkerId";
+            worker_comboBox.ItemsSource = workerList;
+            worker_comboBox.SelectedIndex = 0;
+        }
     }
 }

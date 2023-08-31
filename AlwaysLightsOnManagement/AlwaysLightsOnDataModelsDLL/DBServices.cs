@@ -266,5 +266,13 @@ namespace AlwaysLightsOnManagement
             }
         }
 
+        public List<Worker>? GetWorkers()
+        {
+            using (var dbServices = new DBServices())
+            { 
+                return dbServices.Workers.ToList();
+            }
+        }
+
     }
 }
