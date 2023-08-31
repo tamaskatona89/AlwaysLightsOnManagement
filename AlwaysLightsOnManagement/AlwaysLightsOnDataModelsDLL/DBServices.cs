@@ -279,6 +279,26 @@ namespace AlwaysLightsOnManagement
         }
 
         /// <summary>
+        /// Get finished WorkList completed by Workers based on given Year and Month, Group by WorkType
+        /// </summary>
+        /// <param name="yearNumber">int Year, ex.: 2023</param>
+        /// <param name="monthNumber">int Month, ex.: 8</param>
+        /// <returns>List of ExportableWorkList objects</returns>
+        public List<ExportableWorkList> GetWorkListByMonth_GroupByWorkTypes(int yearNumber, int monthNumber)
+        {
+            using (var dbServices = new DBServices())
+            {
+                List<WorkType> workTypesList = dbServices.WorkTypes.ToList();
+                List<ExportableWorkList> resultList = new();
+                foreach (var workType in workTypesList)
+                {
+                    resultList.Add(new ExportableWorkList(0,"",workType.WorkTypeDescription,"",DateTime.Now));
+                }
+                return resultList;
+            }
+        }
+
+        /// <summary>
         /// Get finished WorkList completed by Workers based on given existing WorkerID, Year, and Month
         /// </summary>
         /// <param name="workerID">int existing WorkerID, ex.: 1</param>

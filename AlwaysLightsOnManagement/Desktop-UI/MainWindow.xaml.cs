@@ -77,5 +77,17 @@ namespace Desktop_UI
         {
             month_comboBox.SelectedIndex = DateTime.Now.Month-1;
         }
+
+        private void groupByButton_Click(object sender, RoutedEventArgs e)
+        {
+            int month_ComboBox_Value = month_comboBox.SelectedIndex + 1;
+            int year_TextBox_Value = Int32.Parse(year_textBox.Text.ToString());
+
+            List<ExportableWorkList> resultList = DBServicesInstance.GetWorkListByMonth_GroupByWorkTypes(year_TextBox_Value, month_ComboBox_Value);
+            
+            //SET DataGrid Source to resultList
+            dataGrid.ItemsSource = resultList;
+
+        }
     }
 }
