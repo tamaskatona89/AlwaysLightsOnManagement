@@ -105,7 +105,7 @@ namespace Desktop_UI
             // Create an instance of XmlSerializer class
             XmlSerializer serializer = new XmlSerializer(typeof(List<ExportableWorkList>));
 
-            string xmlFileName = $"worklistXML_{DateTime.Now.Year}{DateTime.Now.Month}{DateTime.Now.Day}_{DateTime.Now.Hour}{DateTime.Now.Minute}{DateTime.Now.Second}.xml";
+            string xmlFileName = $"worklistXML_{DateTime.Now.Year}-{DateTime.Now.Month}-{DateTime.Now.Day}__{DateTime.Now.Hour}-{DateTime.Now.Minute}-{DateTime.Now.Second}.xml";
             // Create a FileStream to write the serialized XML to a file
             using (FileStream stream = new FileStream(xmlFileName, FileMode.Create))
             {
