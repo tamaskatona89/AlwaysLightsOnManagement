@@ -100,17 +100,26 @@ namespace Desktop_UI
         private void xmlExportButton_Click(object sender, RoutedEventArgs e)
         {
             //do XML Export Here
-
-            //SAVE OUTPUT worklistXML.xml
+            //SAVE OUTPUT worklistXML_{DateStamp}_{TimeStamp}.xml
             
             // Create an instance of XmlSerializer class
             XmlSerializer serializer = new XmlSerializer(typeof(List<ExportableWorkList>));
+
+            string xmlFileName = $"worklistXML_{DateTime.Now.Year}{DateTime.Now.Month}{DateTime.Now.Day}_{DateTime.Now.Hour}{DateTime.Now.Minute}{DateTime.Now.Second}.xml";
             // Create a FileStream to write the serialized XML to a file
-            using (FileStream stream = new FileStream($"worklistXML_{DateTime.Now.Year}{DateTime.Now.Month}{DateTime.Now.Day}_{DateTime.Now.Hour}{DateTime.Now.Minute}{DateTime.Now.Second}.xml", FileMode.Create))
+            using (FileStream stream = new FileStream(xmlFileName, FileMode.Create))
             {
                 // Serialize WorkList to the XML file
                 serializer.Serialize(stream, resultList);
                 stream.Close();
+
+                // DISPLAY POPUP - SAVED
+                string messageBoxText = $"XML fájl mentésre került \"{xmlFileName}\" néven!";
+                string caption = "XML Mentve";
+                MessageBoxButton button = MessageBoxButton.OK;
+                MessageBoxImage icon = MessageBoxImage.Information;
+                
+                MessageBox.Show(messageBoxText, caption, button, icon, MessageBoxResult.No);
             }
 
         }
