@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Desktop_UI"
         mc:Ignorable="d"
-        Title="Mindig Fényes Kft - Adminisztrátori felület" Height="720" Width="1280" ResizeMode="NoResize">
+        Title="Mindig Fényes Kft - Adminisztrátori felület - Teljesített Munkavégzések Lekérdezése" Height="720" Width="1280" ResizeMode="NoResize">
     <Grid>
 
         <Grid HorizontalAlignment="Left" Width="260">
@@ -39,8 +39,8 @@
 
         </Grid>
 
-        <GroupBox x:Name="groupByWorkType_groupBox" Header="Munkatípus szerinti Lista" Margin="10,280,1010,204">
-            <Button x:Name="groupByButton" Content="Munkatípus-Lista" HorizontalAlignment="Left" Margin="52,100,0,0" VerticalAlignment="Top" Click="groupByButton_Click"/>
+        <GroupBox x:Name="groupByWorkType_groupBox" Header="Munkatípus-szerinti Havi Lista" Margin="10,280,1010,204">
+            <Button x:Name="groupByButton" Content="Havi Csoportosított Lista" HorizontalAlignment="Left" Margin="52,100,0,0" VerticalAlignment="Top" Click="groupByButton_Click"/>
         </GroupBox>
         <DataGrid x:Name="dataGrid" Margin="276,0,0,0" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True">
             <DataGrid.Columns>

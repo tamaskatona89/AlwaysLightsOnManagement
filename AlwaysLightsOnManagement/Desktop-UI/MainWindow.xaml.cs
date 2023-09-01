@@ -49,12 +49,12 @@ namespace Desktop_UI
             if (worker_ComboBox_Value == 0)
             {
                 //NO WORKER SELECTED - Show Monthly list with ALL Workers
-                resultList = DBServicesInstance.GetWorkListByMonth(year_TextBox_Value, month_ComboBox_Value);
+                resultList = DBServicesInstance.GetWorkListByTime(year_TextBox_Value, month_ComboBox_Value);
             }
             else
             {
                 //GOT OTHER Existing WorkerID - Show Selected Worker's WorkList
-                resultList = DBServicesInstance.GetWorkListByWorkerIDAndMonth(worker_ComboBox_Value,year_TextBox_Value, month_ComboBox_Value);
+                resultList = DBServicesInstance.GetWorkListByWorkerIDAndTime(worker_ComboBox_Value,year_TextBox_Value, month_ComboBox_Value);
             }
 
             //SET DataGrid Source to resultList

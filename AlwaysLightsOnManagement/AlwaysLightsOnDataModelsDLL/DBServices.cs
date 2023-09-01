@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Xml.Linq;
 using AlwaysLightsOnDataModelsDLL;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
@@ -251,7 +252,7 @@ namespace AlwaysLightsOnManagement
         /// <param name="yearNumber">int Year, ex.: 2023</param>
         /// <param name="monthNumber">int Month, ex.: 8</param>
         /// <returns>List of ExportableWorkList objects</returns>
-        public List<ExportableWorkList> GetWorkListByMonth(int yearNumber,int monthNumber)
+        public List<ExportableWorkList> GetWorkListByTime(int yearNumber, int monthNumber)
         {
             using (var dbServices = new DBServices())
             {
@@ -292,20 +293,27 @@ namespace AlwaysLightsOnManagement
                 List<ExportableWorkList> resultList = new();
                 foreach (var workType in workTypesList)
                 {
-                    resultList.Add(new ExportableWorkList(0,"",workType.WorkTypeDescription,"",DateTime.Now));
+                    //ADD Current WorkType Header To resultList
+                    resultList.Add(new ExportableWorkList(0, "", "▼" + workType.WorkTypeDescription + "▼", "", DateTime.Now));
+
+                    //Select Current WorkType key, and get WorkList related to it.
+                    List<ExportableWorkList> currentWorkTypeResultList = GetWorkListByWorkTypeIDAndTime(workType.WorkTypeId, yearNumber, monthNumber);
+                    foreach (var currentWorkTypeCurrentWork in currentWorkTypeResultList)
+                    {
+                        resultList.Add(new ExportableWorkList(currentWorkTypeCurrentWork.WorkListID, currentWorkTypeCurrentWork.ReportedIssue, workType.WorkTypeDescription, currentWorkTypeCurrentWork.Worker, currentWorkTypeCurrentWork.FixingDateTime));
+                    }
+
+                    //ADD 2xEmpty Delimiter Entries between Types (if not last WorkType...)
+                    if (workType != workTypesList.Last())
+                    {
+                        resultList.Add(new ExportableWorkList(0, "", "", "", DateTime.Now)); resultList.Add(new ExportableWorkList(0, "", "", "", DateTime.Now));
+                    }
                 }
                 return resultList;
             }
         }
 
-        /// <summary>
-        /// Get finished WorkList completed by Workers based on given existing WorkerID, Year, and Month
-        /// </summary>
-        /// <param name="workerID">int existing WorkerID, ex.: 1</param>
-        /// <param name="yearNumber">int Year, ex.: 2023</param>
-        /// <param name="monthNumber">int Month, ex.: 8</param>
-        /// <returns>List of ExportableWorkList objects</returns>
-        public List<ExportableWorkList> GetWorkListByWorkerIDAndMonth(int workerID,int yearNumber, int monthNumber)
+        public List<ExportableWorkList> GetWorkListByWorkerIDAndTime(int workerID, int yearNumber, int monthNumber)
         {
             using (var dbServices = new DBServices())
             {
@@ -333,13 +341,47 @@ namespace AlwaysLightsOnManagement
         }
 
         /// <summary>
+        /// Get finished WorkList completed by Workers based on given existing WorkTypeID, Year, and Month
+        /// </summary>
+        /// <param name="workTypeID">int existing WorkTypeID, ex.: 1</param>
+        /// <param name="yearNumber">int Year, ex.: 2023</param>
+        /// <param name="monthNumber">int Month, ex.: 8</param>
+        /// <returns>List of ExportableWorkList objects</returns>
+        public List<ExportableWorkList> GetWorkListByWorkTypeIDAndTime(int workTypeID, int yearNumber, int monthNumber)
+        {
+            using (var dbServices = new DBServices())
+            {
+                var resultList_interface = from wl in dbServices.WorkLists
+                                           join ri in dbServices.ReportedIssues on wl.IssueId equals ri.IssueId
+                                           join wt in dbServices.WorkTypes on wl.WorkTypeId equals wt.WorkTypeId
+                                           join wker in dbServices.Workers on wl.WorkerId equals wker.WorkerId
+                                           where wl.FixingDateTime.HasValue && wl.FixingDateTime.Value.Year == yearNumber && wl.FixingDateTime.Value.Month == monthNumber && wl.WorkTypeId == workTypeID
+                                           select new ExportableWorkList(Int32.Parse(wl.WorkListId.ToString()),
+                                                                         ri.ZipCode.ToString() + " " + ri.Address.ToString(),
+                                                                          wt.WorkTypeDescription.ToString(),
+                                                                         wker.FullName.ToString(),
+                                                                        wl.FixingDateTime!.Value);
+
+                // COPY resultList_interface --> (ExportableWorkList) resultList what WPF DataGrid can only handle, or put ZERO result message to it.
+                List<ExportableWorkList> resultList = new List<ExportableWorkList>();
+                if (resultList_interface.Any())
+                    foreach (var item in resultList_interface)
+                        resultList.Add(item);
+                else
+                    resultList.Add(new ExportableWorkList(0, "A lekérdezés nem hozott eredményt...", "-", "-", DateTime.Now));
+
+                return resultList;
+            }
+        }
+
+        /// <summary>
         /// Get Workers from Workers DB-Table 
         /// </summary>
         /// <returns>List of Worker object</returns>
         public List<Worker>? GetWorkers()
         {
             using (var dbServices = new DBServices())
-            { 
+            {
                 return dbServices.Workers.ToList();
             }
         }
