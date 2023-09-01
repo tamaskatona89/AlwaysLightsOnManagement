@@ -34,6 +34,8 @@
             <Label x:Name="label2" Content="Dolgozó:" HorizontalAlignment="Left" Margin="12,101,0,0" VerticalAlignment="Top"/>
             <ComboBox x:Name="worker_comboBox" HorizontalAlignment="Left" Margin="75,106,0,0" VerticalAlignment="Top" Width="166" Loaded="worker_comboBox_Loaded"/>
             <GroupBox x:Name="groupBox" Header="Dolgozói-és Havi Lista" Margin="5,0,-5,448"/>
+            <Button x:Name="xmlExportButton" Content="XML Export" HorizontalAlignment="Center" Margin="0,578,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.833,0.653" IsEnabled="False" Click="xmlExportButton_Click"/>
+            <Button x:Name="exitButton" Content="Kilépés" HorizontalAlignment="Center" Margin="0,615,0,0" VerticalAlignment="Top" Click="exitButton_Click"/>
 
 
 

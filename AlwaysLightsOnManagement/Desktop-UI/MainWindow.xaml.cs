@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Xml.Serialization;
 using AlwaysLightsOnDataModelsDLL;
 using AlwaysLightsOnManagement;
 using Microsoft.EntityFrameworkCore;
@@ -22,14 +24,18 @@ namespace Desktop_UI
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
+    [Serializable]
+    [XmlRoot("ExportableWorkList")]
     public partial class MainWindow : Window
     {
         public DBServices DBServicesInstance { get; set; } = new DBServices();
+
+        [XmlElement("ExportableWorkList")]
+        List<ExportableWorkList> resultList = new();
+
         public MainWindow()
         {
             InitializeComponent();
-
-
         }
 
         private void year_textBox_Loaded(object sender, RoutedEventArgs e)
@@ -45,7 +51,7 @@ namespace Desktop_UI
             int year_TextBox_Value = Int32.Parse(year_textBox.Text.ToString());
             int worker_ComboBox_Value = Int32.Parse(worker_comboBox.SelectedValue.ToString()!);
 
-            List<ExportableWorkList> resultList = new();
+            
             if (worker_ComboBox_Value == 0)
             {
                 //NO WORKER SELECTED - Show Monthly list with ALL Workers
@@ -59,6 +65,7 @@ namespace Desktop_UI
 
             //SET DataGrid Source to resultList
             dataGrid.ItemsSource = resultList;
+            xmlExportButton.IsEnabled = true;
         }
 
         private void worker_comboBox_Loaded(object sender, RoutedEventArgs e)
@@ -83,11 +90,34 @@ namespace Desktop_UI
             int month_ComboBox_Value = month_comboBox.SelectedIndex + 1;
             int year_TextBox_Value = Int32.Parse(year_textBox.Text.ToString());
 
-            List<ExportableWorkList> resultList = DBServicesInstance.GetWorkListByMonth_GroupByWorkTypes(year_TextBox_Value, month_ComboBox_Value);
+            resultList = DBServicesInstance.GetWorkListByMonth_GroupByWorkTypes(year_TextBox_Value, month_ComboBox_Value);
             
             //SET DataGrid Source to resultList
             dataGrid.ItemsSource = resultList;
+            xmlExportButton.IsEnabled = true;
+        }
 
+        private void xmlExportButton_Click(object sender, RoutedEventArgs e)
+        {
+            //do XML Export Here
+
+            //SAVE OUTPUT worklistXML.xml
+            
+            // Create an instance of XmlSerializer class
+            XmlSerializer serializer = new XmlSerializer(typeof(List<ExportableWorkList>));
+            // Create a FileStream to write the serialized XML to a file
+            using (FileStream stream = new FileStream($"worklistXML_{DateTime.Now.Year}{DateTime.Now.Month}{DateTime.Now.Day}_{DateTime.Now.Hour}{DateTime.Now.Minute}{DateTime.Now.Second}.xml", FileMode.Create))
+            {
+                // Serialize WorkList to the XML file
+                serializer.Serialize(stream, resultList);
+                stream.Close();
+            }
+
+        }
+
+        private void exitButton_Click(object sender, RoutedEventArgs e)
+        {
+            Environment.Exit(0);
         }
     }
 }
