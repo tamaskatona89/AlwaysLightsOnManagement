@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Xml.Linq;
+using System.Xml.Serialization;
 using AlwaysLightsOnDataModelsDLL;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
@@ -356,10 +357,10 @@ namespace AlwaysLightsOnManagement
                                            join wt in dbServices.WorkTypes on wl.WorkTypeId equals wt.WorkTypeId
                                            join wker in dbServices.Workers on wl.WorkerId equals wker.WorkerId
                                            where wl.FixingDateTime.HasValue && wl.FixingDateTime.Value.Year == yearNumber && wl.FixingDateTime.Value.Month == monthNumber && wl.WorkTypeId == workTypeID
-                                           select new ExportableWorkList(Int32.Parse(wl.WorkListId.ToString()),
-                                                                         ri.ZipCode.ToString() + " " + ri.Address.ToString(),
-                                                                          wt.WorkTypeDescription.ToString(),
-                                                                         wker.FullName.ToString(),
+                                           select new ExportableWorkList(wl.WorkListId,
+                                                                         ri.ZipCode.ToString() + " " + ri.Address,
+                                                                          wt.WorkTypeDescription,
+                                                                         wker.FullName,
                                                                         wl.FixingDateTime!.Value);
 
                 // COPY resultList_interface --> (ExportableWorkList) resultList what WPF DataGrid can only handle, or put ZERO result message to it.
@@ -385,6 +386,27 @@ namespace AlwaysLightsOnManagement
                 return dbServices.Workers.ToList();
             }
         }
+
+        /// <summary>
+        /// Create XML file from List<ExportableWorkList>
+        /// </summary>
+        /// <param name="xmlFileName">Filename to serialize into</param>
+        /// <param name="listToSerialize">List<ExportableWorkList> to Serialize</param>
+        public void CreateXML(string xmlFileName, List<ExportableWorkList> listToSerialize)
+        {
+
+            // Create an instance of XmlSerializer class
+            XmlSerializer serializer = new XmlSerializer(typeof(List<ExportableWorkList>));
+
+            // Create a FileStream to write the serialized XML to a file
+            using (FileStream stream = new FileStream(xmlFileName, FileMode.Create))
+            {
+                // Serialize WorkList to the XML file
+                serializer.Serialize(stream, listToSerialize);
+                stream.Close();
+            }
+        }
+
 
     }
 }
