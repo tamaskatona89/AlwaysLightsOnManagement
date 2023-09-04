@@ -1,23 +1,17 @@
-﻿using System;
+﻿/**
+ *  Author:           Katona Tamás
+ *  E-mail:           katonatomi@msn.com
+ *  Course:           CUBIX - C# és .NET fejlesztés alapok, 2023.June - Sept
+ *  Project Name:     MINDIG FÉNYES KFT, Company's Working and Issue Management Software
+ *  Project Github:   https://github.com/tamaskatona89/AlwaysLightsOnManagement
+ *  Project Duration: 2023.08.23....2023.09.06
+ */
+using System;
 using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Xml.Serialization;
 using AlwaysLightsOnDataModelsDLL;
 using AlwaysLightsOnManagement;
-using Microsoft.EntityFrameworkCore;
 
 namespace Desktop_UI
 {
