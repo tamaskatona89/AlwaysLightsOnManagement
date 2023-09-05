@@ -8,52 +8,46 @@
  */
 using AlwaysLightsOnDataModelsDLL;
 using AlwaysLightsOnManagement;
-namespace AlwaysLightsOnNUnitTest
+namespace AlwaysLightsOnXUnitTest
 {
-    [TestFixture]
-    public class DBServicesNUnitTest
+    
+    public class DBServicesXUnitTest
     {
         public DBServices DBServicesInstance { get; set; } = new DBServices();
-        public List<Worker>? workerList { get; set; }
+        
 
-        [SetUp]
-        public void Setup()
-        {
-            workerList = new List<Worker>();
-            workerList = DBServicesInstance.Workers.ToList();
-        }
 
-        [Test]
+        [Fact]
         public void Test1_GetWorkersListFromDB()
         {
-            Assert.IsNotNull(workerList);
+            List<Worker> workerList = DBServicesInstance.Workers.ToList();
+            Assert.NotNull(workerList);
         }
 
-        [Test]
+        [Fact]
         public void Test2_GetWorkersListFromDB_ExpectedItemCountGreaterThan5()
         {
-            Assert.IsTrue(workerList?.Count > 5, "Not greater than 5.");
-
+            List<Worker> workerList = DBServicesInstance.Workers.ToList();
+            Assert.True(workerList?.Count > 5, "Not greater than 5.");
         }
 
-        [Test]
+        [Fact]
         public void Test3_AddWorkerToDB_ThenGetWorkerDataBack()
         {
             DBServicesInstance.Workers.Add(new Worker { FullName = "Test Test" });
             DBServicesInstance.SaveChanges();
             Worker lastWorker = new();
             lastWorker = DBServicesInstance.Workers.OrderBy(w => w.WorkerId).Last();
-            Assert.IsNotNull(lastWorker);
-            Assert.That(lastWorker.FullName, Is.EqualTo("Test Test"));
-
+            Assert.NotNull(lastWorker);
+            Assert.Equal("Test Test", lastWorker.FullName);
         }
 
-        [Test]
+        [Fact]
         public void Test4_ModifyWorkerInDB_ThenGetWorkerDataBack()
         {
             Worker lastWorker = new();
             lastWorker = DBServicesInstance.Workers.OrderBy(w => w.WorkerId).Last();
-            Assert.IsNotNull(lastWorker);
+            Assert.NotNull(lastWorker);
 
             //MODIFY
             lastWorker.FullName = "Test2 Test2";
@@ -61,18 +55,17 @@ namespace AlwaysLightsOnNUnitTest
 
             //GET DATA BACK
             lastWorker = DBServicesInstance.Workers.OrderBy(w => w.WorkerId).Last();
-            Assert.IsNotNull(lastWorker);
+            Assert.NotNull(lastWorker);
 
-            Assert.That(lastWorker.FullName, Is.EqualTo("Test2 Test2"));
-
+            Assert.Equal("Test2 Test2", lastWorker.FullName);
         }
 
-        [Test]
+        [Fact]
         public void Test5_DeleteWorkerFromDB()
         {
             Worker lastWorker = new();
             lastWorker = DBServicesInstance.Workers.OrderBy(w => w.WorkerId).Last();
-            Assert.IsNotNull(lastWorker);
+            Assert.NotNull(lastWorker);
 
             //GET LASTWORKER ID
             int lastWorkerId = lastWorker.WorkerId;
@@ -86,33 +79,33 @@ namespace AlwaysLightsOnNUnitTest
             int lastWorkerId2 = lastWorker.WorkerId;
 
             //CHECK ID-s BEFORE AND AFTER DELETION
-            Assert.That(lastWorkerId2, Is.Not.EqualTo(lastWorkerId));
+            Assert.NotEqual(lastWorkerId, lastWorkerId2);
         }
 
-        [Test]
+        [Fact]
         public void Test_GetReportedIssuesByZIPCode()
         {
             List<ReportedIssue>? resultList = DBServicesInstance.GetReportedIssuesByZIPCode(4400);
-            Assert.IsNotNull(resultList);
+            Assert.NotNull(resultList);
             resultList = DBServicesInstance.GetReportedIssuesByZIPCode(3700);
-            Assert.IsNotNull(resultList);
+            Assert.NotNull(resultList);
         }
 
-        [Test]
+        [Fact]
         public void Test_GetBudapestReportedOPENIssuesByDistrict()
         {
             List<ReportedIssue>? resultList = DBServicesInstance.GetBudapestReportedOPENIssuesByDistrict(106);
-            Assert.IsNotNull(resultList);
+            Assert.NotNull(resultList);
         }
 
-        [Test]
+        [Fact]
         public void Test_GetReportedIssuesOlderThan()
         {
             List<ReportedIssue>? resultList = DBServicesInstance.GetReportedIssuesOlderThan(1);
-            Assert.IsNotNull(resultList);
+            Assert.NotNull(resultList);
         }
 
-        [Test]
+        [Fact]
         public void Test_AddFinishedWorkToWorkList_AndReadBackData()
         {
             DBServicesInstance.AddFinishedWorkToWorkList(51, 1, 1);
@@ -120,59 +113,52 @@ namespace AlwaysLightsOnNUnitTest
 
             //GET DATA BACK
             WorkList lastWork = DBServicesInstance.WorkLists.OrderBy(wl => wl.WorkListId).Last();
-            Assert.That(lastWork.IssueId, Is.EqualTo(51));
-
+            Assert.Equal(51, lastWork.IssueId);
         }
 
-        [Test]
+        [Fact]
         public void Test_ReportedIssuesQuery_byNumber_Switch()
         {
             List<ReportedIssue>? resultList = DBServicesInstance.ReportedIssuesQuery_byNumber_Switch(106);
-            Assert.IsNotNull(resultList);
-
+            Assert.NotNull(resultList);
         }
 
-        [Test]
+        [Fact]
         public void Test_GetWorkListByTime()
         {
             List<ExportableWorkList>? resultList = DBServicesInstance.GetWorkListByTime(2023, 8);
-            Assert.IsNotNull(resultList);
-
+            Assert.NotNull(resultList);
         }
 
-        [Test]
+        [Fact]
         public void Test_GetWorkListByMonth_GroupByWorkTypes()
         {
             List<ExportableWorkList>? resultList = DBServicesInstance.GetWorkListByMonth_GroupByWorkTypes(2023, 8);
-            Assert.IsNotNull(resultList);
-
+            Assert.NotNull(resultList);
         }
 
-        [Test]
+        [Fact]
         public void Test_GetWorkListByWorkerIDAndTime()
         {
             List<ExportableWorkList>? resultList = DBServicesInstance.GetWorkListByWorkerIDAndTime(6, 2023, 8);
-            Assert.IsNotNull(resultList);
-
+            Assert.NotNull(resultList);
         }
 
-        [Test]
+        [Fact]
         public void Test_GetWorkListByWorkTypeIDAndTime()
         {
             List<ExportableWorkList>? resultList = DBServicesInstance.GetWorkListByWorkTypeIDAndTime(1, 2023, 8);
-            Assert.IsNotNull(resultList);
-
+            Assert.NotNull(resultList);
         }
 
-        [Test]
+        [Fact]
         public void Test_GetWorkers()
         {
             List<Worker>? resultList = DBServicesInstance.GetWorkers();
-            Assert.IsNotNull(resultList);
-
+            Assert.NotNull(resultList);
         }
 
-        [Test]
+        [Fact]
         public void Test_CreateXML()
         {
             List<ExportableWorkList> resultList = new List<ExportableWorkList>();
@@ -181,12 +167,8 @@ namespace AlwaysLightsOnNUnitTest
 
             if (File.Exists("file.xml"))
             {
-                Assert.IsNotNull(resultList);
+                Assert.NotNull(resultList);
             }
-
-
         }
-
-
     }
 }
